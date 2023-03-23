@@ -4,7 +4,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, U
 // src/modules/content/entities/post.entity.ts
 @Entity('content_posts')
 export class PostEntity extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn('uuid') // 格式： 550e8400-e29b-41d4-a716-446655440000
     id!: string;
 
     @Column({ comment: '文章标题' })
