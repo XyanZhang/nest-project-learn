@@ -19,3 +19,4 @@ export const database = (): TypeOrmModuleOptions => ({
   autoLoadEntities: true,
   // entities: []
 });
+// 在AppModule中通过forRoot传入配置并注册数据库模块即可，这样应用在启动时会根据模块(Entity)自动同步数据结构并连接数据库

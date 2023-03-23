@@ -4,6 +4,7 @@ import { DatabaseModule } from "../database/database.module";
 import { PostController } from "./controllers/post.controller";
 import { PostEntity } from "./entities/post.entity";
 import { PostRepository } from "./repositories/post.repository";
+import { SanitizeService } from "./repositories/services/sanitize.service";
 import { PostService } from "./services/post.services";
 import { PostSubscriber } from "./subscribers/post.subscriber";
 
@@ -14,7 +15,7 @@ import { PostSubscriber } from "./subscribers/post.subscriber";
       DatabaseModule.forRepository([PostRepository]),
   ],
   controllers: [PostController],
-  providers: [PostService, PostSubscriber],
+  providers: [PostService, PostSubscriber, SanitizeService],
   exports: [PostService, DatabaseModule.forRepository([PostRepository])],
 })
 export class ContentModule {}

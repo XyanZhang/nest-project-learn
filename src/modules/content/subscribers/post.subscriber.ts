@@ -4,7 +4,6 @@ import { PostEntity } from '../entities/post.entity';
 import { PostRepository } from '../repositories/post.repository';
 import { SanitizeService } from '../repositories/services/sanitize.service';
 
-// src/modules/content/subscribers/post.subscriber.ts
 @EventSubscriber()
 export class PostSubscriber {
   constructor(
