@@ -9,10 +9,9 @@ export class PostController {
 
     @Get()
     async list(
-        @Query()
-        options: PaginateOptions,
-    ) {
-        return this.service.paginate(options);
+        @Query() { page = 1, limit = 10 } : PaginateOptions,
+    ) { 
+      return this.service.paginate({ page, limit });
     }
 
     @Get(':id')
@@ -22,7 +21,6 @@ export class PostController {
     ) {
         return this.service.detail(id);
     }
-
     @Post()
     async store(
         @Body()
