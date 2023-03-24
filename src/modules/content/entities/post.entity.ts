@@ -1,6 +1,8 @@
 import { PostBodyType } from "@/modules/database/constants";
 import { Exclude, Expose, Type } from "class-transformer";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CategoryEntity } from "./category.entity";
+import { CommentEntity } from "./comment.entity";
 
 // src/modules/content/entities/post.entity.ts
 @Exclude()
@@ -60,4 +62,15 @@ export class PostEntity extends BaseEntity {
         comment: '更新时间',
     })
     updatedAt!: Date;
+
+    @ManyToMany(() => CategoryEntity, (category) => category.posts, {
+      // 在新增文章时,如果所属分类不存在则直接创建
+      cascade: true, // true 表示支持("insert" | "update" | "remove" | "soft-remove" | "recover")
+    })
+    // 多对多关联时，关联的一侧(比如这里的PostEntity的categories)必须加上@JoinTable装饰器
+    // @JoinTable()
+    categories!: CategoryEntity[];
+
+    @JoinTable()
+    comments!: CommentEntity[];
 }
