@@ -9,3 +9,36 @@
 + Module： Module 将 Controller 和 Service 组织在一起。它们定义了如何将应用程序的各个部分进行组装、配置和提供。 Module 负责初始化应用程序，并注册和管理它所需要的组件和依赖项。 Module 还可以定义各种提供者、控制器和服务，并将它们所有的组件绑定在一起以构建应用程序。
 
 > 总之，Controller 主要处理输入和输出，Service 处理业务逻辑，Module 则负责组织和管理它们。这些概念极其重要，有助于构建高度可维护、松耦合的应用程序。
+
+## 管道验证
+
+```typescript
+@Query(
+    new ValidationPipe({
+        transform: true,
+        forbidUnknownValues: true,
+        validationError: { target: false },
+    }),
+)
+options: QueryPostDto,
+```
+
+在实例化ValidationPipe这个验证管道时，传入的参数的作用如下
+● transform 如果设置成true则代码在验证之后对数据进行序列化
+● forbidUnknownValues 代表如果请求数据中有多余的数据(比如没有在验证管道中定义的属性)则会报出403错误
+● validationError.target 代表不会在响应数据中使我们的验证类也暴露传来
+● groups用于设置验证组
+
+ValidationPipe这个验证管道流程如下
+一，在验证前先把自动把传入的请求数据先通过class-transformer导出的plainToInstance函数把普通对象的请求数据转换成通过验证数据类型提示的类的实例，比如data: UpdatePostDto，会是传入的{"id": "xxx","title": "yyy"}变成
+
+```ts
+const data = new UpdatePostDto()
+data.id = 'xxx'
+data.title = 'yyy'
+```
+
+二，通过每个属性的验证约束对它们进行验证(如果有转译则转译之后对该属性进行验证)
+三，验证失败则响应403给前端
+四，如果transform选项设置成true，则在验证无误后调用instanceToPlain函数(也是class-transformer的内置函数)把前面生成的DTO实例再次转换为普通对象(这时候那些加了@Transform装饰器的属性已经被转译了的)
+五，把对象转入到控制器，以便传给服务进行数据操作
