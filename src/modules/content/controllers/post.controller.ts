@@ -1,14 +1,16 @@
-import { PaginateOptions } from "@/modules/database/types";
-import { Controller, Get, Query, Param, ParseUUIDPipe, Post, Body, Patch, Delete, ValidationPipe } from "@nestjs/common";
+import { AppIntercepter } from "@/modules/core/providers/app.intercepter";
+import { Controller, Get, Query, Param, ParseUUIDPipe, Post, Body, Patch, Delete, ValidationPipe, UseInterceptors, SerializeOptions } from "@nestjs/common";
 import { CreatePostDto, QueryPostDto, UpdatePostDto } from "../dtos/post.dto";
 import { PostService } from "../services/post.services";
 
 // src/modules/content/controllers/post.controller.ts	
+@UseInterceptors(AppIntercepter)
 @Controller('posts')
 export class PostController {
     constructor(protected service: PostService) {}
 
     @Get()
+    @SerializeOptions({ groups: ['post-list'] }) // 配置序列化组
     async list(
         @Query(
             // 对请求数据进行验证
@@ -23,6 +25,7 @@ export class PostController {
     }
 
     @Get(':id')
+    @SerializeOptions({ groups: ['post-detail'] })
     async detail(
         @Param('id', new ParseUUIDPipe())
         id: string,
@@ -30,6 +33,7 @@ export class PostController {
         return this.service.detail(id);
     }
     @Post()
+    @SerializeOptions({ groups: ['post-detail'] })
     async store(
         @Body(
             new ValidationPipe({
@@ -45,6 +49,7 @@ export class PostController {
     }
 
     @Patch()
+    @SerializeOptions({ groups: ['post-detail'] })
     async update(
         @Body(
             new ValidationPipe({
@@ -60,6 +65,7 @@ export class PostController {
     }
 
     @Delete(':id')
+    @SerializeOptions({ groups: ['post-detail'] })
     async delete(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.service.delete(id);
     }
