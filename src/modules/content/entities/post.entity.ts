@@ -1,6 +1,6 @@
 import { PostBodyType } from "@/modules/database/constants";
 import { Exclude, Expose, Type } from "class-transformer";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { CommentEntity } from "./comment.entity";
 
@@ -68,9 +68,15 @@ export class PostEntity extends BaseEntity {
       cascade: true, // true 表示支持("insert" | "update" | "remove" | "soft-remove" | "recover")
     })
     // 多对多关联时，关联的一侧(比如这里的PostEntity的categories)必须加上@JoinTable装饰器
-    // @JoinTable()
-    categories!: CategoryEntity[];
+    @JoinTable() 
+    categories?: CategoryEntity[];
 
-    @JoinTable()
+
+    @OneToMany((type) => CommentEntity, (comment) => comment.post, {
+        cascade: true,
+    })
     comments!: CommentEntity[];
+
+    @Expose()
+    commentCount!: number;
 }

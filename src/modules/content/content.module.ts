@@ -7,11 +7,13 @@ import { PostRepository } from "./repositories/post.repository";
 import { SanitizeService } from "./repositories/services/sanitize.service";
 import { PostService } from "./services/post.services";
 import { PostSubscriber } from "./subscribers/post.subscriber";
+import { CategoryEntity } from './entities/category.entity';
+import { CommentEntity } from './entities/comment.entity';
 
 // src/modules/content/content.module.ts
 @Module({
   imports: [
-      TypeOrmModule.forFeature([PostEntity]),
+      TypeOrmModule.forFeature([PostEntity, CategoryEntity, CommentEntity]), // 为模块注册实体
       DatabaseModule.forRepository([PostRepository]),
   ],
   controllers: [PostController],
