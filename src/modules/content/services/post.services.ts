@@ -7,11 +7,16 @@ import { isFunction } from "util";
 import { PostEntity } from "../entities/post.entity";
 import { PostRepository } from "../repositories/post.repository";
 import { omit, isNil } from 'lodash'
+import { CategoryService } from "./category.service";
 
 // src/modules/content/services/post.service.ts
 @Injectable()
 export class PostService {
-  constructor(protected repository: PostRepository) {}
+  constructor(
+    protected repository: PostRepository,
+    protected categoryRepository: CategoryRepository,
+    protected categoryService: CategoryService,
+) {}
 
   /**
    * 获取分页数据
