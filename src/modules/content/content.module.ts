@@ -10,7 +10,13 @@ import { PostSubscriber } from "./subscribers/post.subscriber";
 import { CategoryEntity } from './entities/category.entity';
 import { CommentEntity } from './entities/comment.entity';
 
-// src/modules/content/content.module.ts
+// 解释一下
+// 1. TypeOrmModule.forFeature([PostEntity, CategoryEntity, CommentEntity])，这个是为模块注册实体
+// 2. DatabaseModule.forRepository([PostRepository])，这个是为模块注册仓库
+// 3. exports: [PostService, DatabaseModule.forRepository([PostRepository])], 这个是为模块导出服务和仓库
+// 4. providers: [PostService, PostSubscriber, SanitizeService], 这个是为模块注册服务和订阅器
+// 5. controllers: [PostController], 这个是为模块注册控制器
+
 @Module({
   imports: [
       TypeOrmModule.forFeature([PostEntity, CategoryEntity, CommentEntity]), // 为模块注册实体
