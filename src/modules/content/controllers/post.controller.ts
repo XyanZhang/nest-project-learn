@@ -48,6 +48,9 @@ export class PostController {
         return this.service.create(data);
     }
 
+    // 解释一下patch
+    // patch是用来更新部分数据的，比如说我们只想更新文章的标题，那么我们就可以使用patch方法
+    // 但是如果我们想更新文章的所有数据，那么我们就可以使用put方法
     @Patch()
     @SerializeOptions({ groups: ['post-detail'] })
     async update(
