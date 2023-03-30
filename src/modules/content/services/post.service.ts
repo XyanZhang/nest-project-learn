@@ -3,19 +3,15 @@ import { paginate } from "@/modules/database/helper";
 import { PaginateOptions, QueryHook } from "@/modules/database/types";
 import { Injectable } from "@nestjs/common";
 import { EntityNotFoundError, SelectQueryBuilder, Not, IsNull } from "typeorm";
-import { isFunction } from "util";
 import { PostEntity } from "../entities/post.entity";
 import { PostRepository } from "../repositories/post.repository";
-import { omit, isNil } from 'lodash'
-import { CategoryService } from "./category.service";
-
+import { omit, isNil, isFunction } from 'lodash'
 // src/modules/content/services/post.service.ts
+
 @Injectable()
 export class PostService {
   constructor(
     protected repository: PostRepository,
-    protected categoryRepository: CategoryRepository,
-    protected categoryService: CategoryService,
 ) {}
 
   /**

@@ -1,5 +1,5 @@
-import { Exclude, Expose } from "class-transformer";
-import { Tree, Entity, BaseEntity, ManyToOne, TreeParent, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Exclude, Expose, Type } from "class-transformer";
+import { Tree, Entity, BaseEntity, ManyToOne, TreeParent, OneToMany, PrimaryGeneratedColumn, TreeChildren, Column, CreateDateColumn } from "typeorm";
 import { PostEntity } from './post.entity';
 
 // src/modules/content/entities/comment.entity.ts
@@ -9,8 +9,22 @@ import { PostEntity } from './post.entity';
 export class CommentEntity extends BaseEntity {
     @Expose()
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
-    
+    id: string;
+
+    @Expose()
+    @Column({ comment: '评论内容', type: 'longtext' })
+    body: string;
+
+    @Expose()
+    @Type(() => Date)
+    @CreateDateColumn({
+        comment: '创建时间',
+    })
+    createdAt: Date;
+
+    @Expose()
+    depth = 0;
+
     @Expose()
     @ManyToOne((type) => PostEntity, (post) => post.comments, {
         // 文章不能为空
@@ -19,10 +33,12 @@ export class CommentEntity extends BaseEntity {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
-    post!: PostEntity;
+    post: PostEntity;
 
     @TreeParent({ onDelete: 'CASCADE' })
-    parent!: CommentEntity | null;
-
-    // ...
+    parent: CommentEntity | null;
+    
+    @Expose()
+    @TreeChildren({ cascade: true })
+    children: CommentEntity[];
 }

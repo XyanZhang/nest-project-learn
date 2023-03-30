@@ -1,7 +1,7 @@
 import { AppIntercepter } from "@/modules/core/providers/app.intercepter";
 import { Controller, Get, Query, Param, ParseUUIDPipe, Post, Body, Patch, Delete, ValidationPipe, UseInterceptors, SerializeOptions } from "@nestjs/common";
 import { CreatePostDto, QueryPostDto, UpdatePostDto } from "../dtos/post.dto";
-import { PostService } from "../services/post.services";
+import { PostService } from "../services/post.service";
 
 // src/modules/content/controllers/post.controller.ts	
 @UseInterceptors(AppIntercepter)

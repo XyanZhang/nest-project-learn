@@ -5,7 +5,7 @@ import { PostController } from "./controllers/post.controller";
 import { PostEntity } from "./entities/post.entity";
 import { PostRepository } from "./repositories/post.repository";
 import { SanitizeService } from "./repositories/services/sanitize.service";
-import { PostService } from "./services/post.services";
+import { PostService } from "./services/post.service";
 import { PostSubscriber } from "./subscribers/post.subscriber";
 import { CategoryEntity } from './entities/category.entity';
 import { CommentEntity } from './entities/comment.entity';
