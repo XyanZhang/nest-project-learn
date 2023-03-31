@@ -9,6 +9,9 @@ import { PostService } from "./services/post.service";
 import { PostSubscriber } from "./subscribers/post.subscriber";
 import { CategoryEntity } from './entities/category.entity';
 import { CommentEntity } from './entities/comment.entity';
+import { CategoryController } from './controllers/category.controller';
+import { CategoryService } from "./services/category.service";
+import { CategoryRepository } from "./repositories/category.repository";
 
 // 解释一下
 // 1. TypeOrmModule.forFeature([PostEntity, CategoryEntity, CommentEntity])，这个是为模块注册实体
@@ -20,10 +23,10 @@ import { CommentEntity } from './entities/comment.entity';
 @Module({
   imports: [
       TypeOrmModule.forFeature([PostEntity, CategoryEntity, CommentEntity]), // 为模块注册实体
-      DatabaseModule.forRepository([PostRepository]),
+      DatabaseModule.forRepository([PostRepository, CategoryRepository]),
   ],
-  controllers: [PostController],
-  providers: [PostService, PostSubscriber, SanitizeService],
-  exports: [PostService, DatabaseModule.forRepository([PostRepository])],
+  controllers: [PostController, CategoryController],
+  providers: [PostService, PostSubscriber, SanitizeService, CategoryService],
+  exports: [PostService, CategoryService, DatabaseModule.forRepository([PostRepository])],
 })
 export class ContentModule {}
