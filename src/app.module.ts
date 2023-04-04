@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { database } from './config/database.config';
 import { DatabaseModule } from './modules/database/database.module';
 import { ContentModule } from './modules/content/content.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppPipe } from './modules/core/providers/app.pipe';
+import { AppIntercepter } from './modules/core/providers/app.intercepter';
 @Module({
   imports: [DatabaseModule.forRoot(database), ContentModule],
   controllers: [AppController],
@@ -18,8 +19,12 @@ import { AppPipe } from './modules/core/providers/app.pipe';
         transform: true,
         forbidUnknownValues: true,
         validationError: { target: false },
-    }),
-    }
+      }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AppIntercepter,
+    },
   ]
 })
 export class AppModule {}
