@@ -26,14 +26,7 @@ export class CategoryController {
   // 获取分页的分类
   @Get()
   async list(
-    @Query(
-      // 对请求数据进行验证
-      new ValidationPipe({
-        transform: true,
-        forbidUnknownValues: true,
-        validationError: { target: false },
-      }),
-    )
+    @Query()
     options: QueryCategoryDto,
   ) {
     return this.service.paginate(options);
@@ -58,13 +51,7 @@ export class CategoryController {
   // 创建分类
   @Post()
   async store(
-    @Body(
-      new ValidationPipe({
-        transform: true,
-        forbidUnknownValues: true,
-        validationError: { target: false },
-      }),
-    )
+    @Body()
     data: CreateCategoryDto,
   ) {
     return this.service.create(data);
@@ -73,14 +60,7 @@ export class CategoryController {
   @Patch()
   // @SerializeOptions({ groups: ['category-detail'] })
   async update(
-      @Body(
-          new ValidationPipe({
-              transform: true,
-              forbidUnknownValues: true,
-              validationError: { target: false },
-              // groups: ['update'],
-          }),
-      )
+      @Body()
       data: UpdateCategoryDto,
   ) {
       return this.service.update(data);

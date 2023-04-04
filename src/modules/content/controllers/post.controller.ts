@@ -19,6 +19,7 @@ export class PostController {
                 forbidUnknownValues: true,
                 validationError: { target: false },
             }),
+            // 以上管道验证 可以优化，使用全局管道验证
         ) options : QueryPostDto,
     ) { 
       return this.service.paginate(options);
