@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { database } from './config/database.config';
 import { DatabaseModule } from './modules/database/database.module';
 import { ContentModule } from './modules/content/content.module';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AppPipe } from './modules/core/providers/app.pipe';
 import { AppIntercepter } from './modules/core/providers/app.intercepter';
+import { AppFilter } from './modules/core/providers/app.filter';
 @Module({
   imports: [DatabaseModule.forRoot(database), ContentModule],
   controllers: [AppController],
@@ -21,9 +22,15 @@ import { AppIntercepter } from './modules/core/providers/app.intercepter';
         validationError: { target: false },
       }),
     },
+    // 全局序列化拦截器
     {
       provide: APP_INTERCEPTOR,
       useClass: AppIntercepter,
+    },
+    // 全局异常过滤器
+    {
+      provide: APP_FILTER,
+      useClass: AppFilter,
     },
   ]
 })
