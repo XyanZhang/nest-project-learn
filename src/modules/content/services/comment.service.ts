@@ -1,6 +1,6 @@
 import { treePaginate } from "@/modules/database/helper";
 import { Injectable, ForbiddenException } from "@nestjs/common";
-import { SelectQueryBuilder, EntityNotFoundError } from "typeorm";
+import { SelectQueryBuilder, EntityNotFoundError, In } from "typeorm";
 import { QueryCommentTreeDto, QueryCommentDto, CreateCommentDto } from "../dtos/comment.dto";
 import { CommentEntity } from "../entities/comment.entity";
 import { CommentRepository } from "../repositories/comment.repository";
@@ -78,6 +78,11 @@ export class CommentService {
     async delete(id: string) {
         const comment = await this.repository.findOneOrFail({ where: { id: id ?? null } });
         return this.repository.remove(comment);
+    }
+    
+    async deleteMulti(ids: string[]) {
+        const comments = await this.repository.find({ where: { id: In(ids) } });
+        return this.repository.remove(comments);
     }
 
     /**

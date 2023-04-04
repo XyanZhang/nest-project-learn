@@ -1,7 +1,8 @@
 // src/modules/content/dtos/post.dto.ts
 
+import { DtoValidation } from "@/modules/core/decorators/dto-validation.decorator";
 import { toBoolean } from "@/modules/core/helpters";
-import { PostOrderType } from "@/modules/database/constants";
+import { PostOrderType, SelectTrashMode } from "@/modules/database/constants";
 import { PaginateOptions } from "@/modules/database/types";
 import { PartialType } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
@@ -15,7 +16,12 @@ import { toNumber, isNil } from 'lodash'
 /**
  * 文章分页查询验证
  */
+@DtoValidation({ type: 'query' })
 export class QueryPostDto implements PaginateOptions {
+  @IsEnum(SelectTrashMode)
+  @IsOptional()
+  trashed?: SelectTrashMode;
+
   @Transform(({ value }) => toBoolean(value)) // 进行了转译
   @IsBoolean() // 验证
   @IsOptional()

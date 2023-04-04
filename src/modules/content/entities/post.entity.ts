@@ -1,6 +1,6 @@
 import { PostBodyType } from "@/modules/database/constants";
 import { Exclude, Expose, Type } from "class-transformer";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { CommentEntity } from "./comment.entity";
 
@@ -79,4 +79,12 @@ export class PostEntity extends BaseEntity {
 
     @Expose()
     commentCount!: number;
+
+
+    @Expose()
+    @Type(() => Date)
+    @DeleteDateColumn({
+        comment: '删除时间',
+    })
+    deletedAt: Date;
 }
