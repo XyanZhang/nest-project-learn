@@ -1,4 +1,5 @@
 import { isMobilePhone, ValidationOptions, registerDecorator, ValidationArguments } from "class-validator";
+import { MobilePhoneLocale, IsMobilePhoneOptions } from 'validator/lib/isMobilePhone';
 
 /**
  * 手机号验证规则,必须是"区域号.手机号"的形式

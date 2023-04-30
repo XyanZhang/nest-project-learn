@@ -1,5 +1,6 @@
 import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments, ValidationOptions, registerDecorator } from "class-validator";
 
+type ModelType = 1 | 2 | 3 | 4 | 5;
 /**
  * 密码验证规则
  */
