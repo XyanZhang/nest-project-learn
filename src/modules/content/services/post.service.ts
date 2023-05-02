@@ -1,18 +1,16 @@
-import { PostOrderType } from "@/modules/database/constants";
-import { paginate } from "@/modules/database/helper";
-import { PaginateOptions, QueryHook } from "@/modules/database/types";
-import { Injectable } from "@nestjs/common";
-import { EntityNotFoundError, SelectQueryBuilder, Not, IsNull } from "typeorm";
-import { PostEntity } from "../entities/post.entity";
-import { PostRepository } from "../repositories/post.repository";
-import { omit, isNil, isFunction } from 'lodash'
+import { PostOrderType, SelectTrashMode } from '@/modules/database/constants';
+import { paginate } from '@/modules/database/helper';
+import { PaginateOptions, QueryHook } from '@/modules/database/types';
+import { Injectable } from '@nestjs/common';
+import { EntityNotFoundError, SelectQueryBuilder, Not, IsNull } from 'typeorm';
+import { PostEntity } from '../entities/post.entity';
+import { PostRepository } from '../repositories/post.repository';
+import { omit, isNil, isFunction } from 'lodash';
 // src/modules/content/services/post.service.ts
 
 @Injectable()
 export class PostService {
-  constructor(
-    protected repository: PostRepository,
-) {}
+  constructor(protected repository: PostRepository) {}
 
   /**
    * 获取分页数据
@@ -82,8 +80,19 @@ export class PostService {
     options: Record<string, any>,
     callback?: QueryHook<PostEntity>,
   ) {
-    const { orderBy, isPublished } = options;
+    const {
+      category,
+      orderBy,
+      isPublished,
+      trashed = SelectTrashMode.NONE,
+    } = options;
     let newQb = qb;
+    // 是否查询回收站
+    if (trashed === SelectTrashMode.ALL || trashed === SelectTrashMode.ONLY) {
+      qb.withDeleted();
+      if (trashed === SelectTrashMode.ONLY)
+        qb.where(`post.deletedAt is not null`);
+    }
     if (typeof isPublished === 'boolean') {
       newQb = isPublished
         ? newQb.where({
