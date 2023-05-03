@@ -1,16 +1,28 @@
 import { DtoValidation } from "@/modules/core/decorators/dto-validation.decorator";
+import { SelectTrashMode } from "@/modules/database/constants";
 import { PaginateOptions } from "@/modules/database/types";
 import { PartialType } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { Min, IsNumber, IsOptional, MaxLength, IsNotEmpty, IsUUID, ValidateIf, IsDefined } from "class-validator";
+import { Min, IsNumber, IsOptional, MaxLength, IsNotEmpty, IsUUID, ValidateIf, IsDefined, IsEnum } from "class-validator";
 import { toNumber } from 'lodash'
 
 // @ValidateIf 是条件验证，在这里的作用是用于在添加或修改分类时，有指定父分类ID，且不为null时才进行验证
 // src/modules/content/dtos/category.dto.ts
 
 // 给它们添加上DtoValidation装饰器并设置一下验证选项
+
+/**
+ * 树形分类查询验证
+ */
 @DtoValidation({ type: 'query' })
-export class QueryCategoryDto  implements PaginateOptions {
+export class QueryCategoryTreeDto {
+    @IsEnum(SelectTrashMode)
+    @IsOptional()
+    trashed?: SelectTrashMode;
+}
+
+@DtoValidation({ type: 'query' })
+export class QueryCategoryDto  extends QueryCategoryTreeDto  implements PaginateOptions {
   @Transform(({ value }) => toNumber(value))
   @Min(1, { message: '当前页必须大于1' })
   @IsNumber()

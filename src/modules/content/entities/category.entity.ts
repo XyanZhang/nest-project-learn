@@ -1,5 +1,5 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { PostEntity } from './post.entity';
 
 /* 
@@ -42,6 +42,13 @@ export class CategoryEntity extends BaseEntity {
 
   @ManyToMany(() => PostEntity, (post) => post.categories)
   posts!: PostEntity[];
+
+  @Expose()
+  @Type(() => Date)
+  @DeleteDateColumn({
+      comment: '删除时间',
+  })
+  deletedAt: Date;
 }
 
 /* 

@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
   Query,
+  SerializeOptions,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateCategoryDto, QueryCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
+import { CreateCategoryDto, QueryCategoryDto, QueryCategoryTreeDto, UpdateCategoryDto } from '../dtos/category.dto';
 import { CategoryService } from '../services/category.service';
 import { Delete } from '@nestjs/common';
+import { DeleteWithTrashDto, RestoreDto } from '@/modules/restful/dtos/delete.dto';
 
 @Controller('categories')
 export class CategoryController {
@@ -66,11 +68,30 @@ export class CategoryController {
       return this.service.update(data);
   }
 
-  @Delete()
-  async delete(
-    @Body('id', new ParseUUIDPipe())
-    id: string,
-  ) {
-    return this.service.delete(id);
+
+  @Get('tree')
+  @SerializeOptions({ groups: ['category-tree'] })
+  async tree(@Query() options: QueryCategoryTreeDto) {
+      return this.service.findTrees(options);
   }
+
+  @Delete()
+  @SerializeOptions({ groups: ['category-list'] })
+  async delete(
+      @Body()
+      data: DeleteWithTrashDto,
+  ) {
+      const { ids, trash } = data;
+      return this.service.delete(ids, trash);
+  }
+
+  // @Patch('restore')
+  // @SerializeOptions({ groups: ['category-list'] })
+  // async restore(
+  //     @Body()
+  //     data: RestoreDto,
+  // ) {
+  //     const { ids } = data;
+  //     return this.service.restore(ids);
+  // }
 }
