@@ -2,7 +2,13 @@ import { PostOrderType, SelectTrashMode } from '@/modules/database/constants';
 import { paginate } from '@/modules/database/helper';
 import { PaginateOptions, QueryHook } from '@/modules/database/types';
 import { Injectable } from '@nestjs/common';
-import { EntityNotFoundError, SelectQueryBuilder, Not, IsNull } from 'typeorm';
+import {
+  EntityNotFoundError,
+  SelectQueryBuilder,
+  Not,
+  IsNull,
+  In,
+} from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
 import { PostRepository } from '../repositories/post.repository';
 import { omit, isNil, isFunction } from 'lodash';
@@ -67,6 +73,49 @@ export class PostService {
   async delete(id: string) {
     const item = await this.repository.findOneByOrFail({ id });
     return this.repository.remove(item);
+  }
+  /**
+   * 删除文章
+   * @param id
+   */
+  async deleteMulti(ids: string[], trash?: boolean) {
+    const items = await this.repository.find({
+      where: { id: In(ids) } as any,
+      withDeleted: true,
+    });
+    if (trash) {
+      // 对已软删除的数据再次删除时直接通过remove方法从数据库中清除
+      const directs = items.filter((item) => !isNil(item.deletedAt));
+      const softs = items.filter((item) => isNil(item.deletedAt));
+      return [
+        ...(await this.repository.remove(directs)),
+        ...(await this.repository.softRemove(softs)),
+      ];
+    }
+    return this.repository.remove(items);
+  }
+
+  /**
+   * 恢复文章
+   * @param ids
+   */
+  async restore(ids: string[]) {
+    const items = await this.repository.find({
+      where: { id: In(ids) } as any,
+      withDeleted: true,
+    });
+    // 过滤掉不在回收站中的数据
+    const trasheds = items
+      .filter((item) => !isNil(item))
+      .map((item) => item.id);
+    if (trasheds.length < 0) return [];
+    await this.repository.restore(trasheds);
+    const qb = await this.buildListQuery(
+      this.repository.buildBaseQB(),
+      {},
+      async (qbuilder) => qbuilder.andWhereInIds(trasheds),
+    );
+    return qb.getMany();
   }
 
   /**

@@ -2,6 +2,7 @@
 import { Controller, Get, Query, Param, ParseUUIDPipe, Post, Body, Patch, Delete, ValidationPipe, SerializeOptions } from "@nestjs/common";
 import { CreatePostDto, QueryPostDto, UpdatePostDto } from "../dtos/post.dto";
 import { PostService } from "../services/post.service";
+import { DeleteWithTrashDto, RestoreDto } from "@/modules/restful/dtos/delete.dto";
 
 // src/modules/content/controllers/post.controller.ts	
 // @UseInterceptors(AppIntercepter)
@@ -72,5 +73,25 @@ export class PostController {
     @SerializeOptions({ groups: ['post-detail'] })
     async delete(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.service.delete(id);
+    }
+
+    @Delete()
+    @SerializeOptions({ groups: ['post-list'] })
+    async deleteMulti(
+        @Body()
+        data: DeleteWithTrashDto,
+    ) {
+        const { ids, trash } = data;
+        return this.service.deleteMulti(ids, trash);
+    }
+
+    @Patch('restore')
+    @SerializeOptions({ groups: ['post-list'] })
+    async restore(
+        @Body()
+        data: RestoreDto,
+    ) {
+        const { ids } = data;
+        return this.service.restore(ids);
     }
 }
