@@ -163,3 +163,43 @@ export function IsPassword(model?: ModelType, validationOptions?: ValidationOpti
 })
 readonly password!: string;
 ```
+
+## elasticsearch
+
+Elasticsearch 是一个基于 Lucene 的搜索引擎，它提供了分布式、多租户的全文搜索引擎功能。它可以快速地存储、搜索和分析大量的数据，支持实时搜索和分析，具有高可用性和可扩展性。
+
+基本使用包括以下几个方面：
+
+安装和启动 Elasticsearch：您可以从 Elasticsearch 的官方网站（<https://www.elastic.co/downloads/elasticsearch）>下载适用于您的操作系统的安装程序，并按照提示进行安装。安装完成后，您可以在命令行中输入 elasticsearch 命令来启动 Elasticsearch。
+
+创建索引：在 Elasticsearch 中，数据存储在索引中。您可以使用 PUT 请求来创建一个新的索引，例如：
+
+PUT /my_index
+这个命令将创建一个名为 my_index 的新索引。
+
+添加文档：在 Elasticsearch 中，文档是索引中的基本单位。您可以使用 PUT 请求来添加一个新的文档，例如：
+PUT /my_index/_doc/1
+{
+  "title": "Elasticsearch Introduction",
+  "content": "This is an introduction to Elasticsearch."
+}
+这个命令将在 my_index 索引中添加一个新的文档，其 ID 为 1，包含 title 和 content 两个字段。
+
+搜索文档：在 Elasticsearch 中，您可以使用 GET 请求来搜索文档。例如，以下命令将搜索 my_index 索引中包含 "Elasticsearch" 关键字的文档：
+GET /my_index/_search?q=Elasticsearch
+聚合数据：在 Elasticsearch 中，您可以使用聚合来对数据进行分析和统计。例如，以下命令将计算 my_index 索引中 title 字段的平均长度：
+
+```js
+// GET /my_index/_search
+{
+  "aggs": {
+    "avg_title_length": {
+      "avg": {
+        "field": "title.length"
+      }
+    }
+  }
+}
+```
+
+这个命令将返回一个名为 avg_title_length 的聚合结果，其中包含 title 字段的平均长度。
