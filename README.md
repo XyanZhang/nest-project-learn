@@ -178,12 +178,15 @@ PUT /my_index
 这个命令将创建一个名为 my_index 的新索引。
 
 添加文档：在 Elasticsearch 中，文档是索引中的基本单位。您可以使用 PUT 请求来添加一个新的文档，例如：
-PUT /my_index/_doc/1
+
+```js
+// PUT /my_index/_doc/1
 {
   "title": "Elasticsearch Introduction",
   "content": "This is an introduction to Elasticsearch."
 }
-这个命令将在 my_index 索引中添加一个新的文档，其 ID 为 1，包含 title 和 content 两个字段。
+// 这个命令将在 my_index 索引中添加一个新的文档，其 ID 为 1，包含 title 和 content 两个字段。
+```
 
 搜索文档：在 Elasticsearch 中，您可以使用 GET 请求来搜索文档。例如，以下命令将搜索 my_index 索引中包含 "Elasticsearch" 关键字的文档：
 GET /my_index/_search?q=Elasticsearch
@@ -200,6 +203,5 @@ GET /my_index/_search?q=Elasticsearch
     }
   }
 }
+// 这个命令将返回一个名为 avg_title_length 的聚合结果，其中包含 title 字段的平均长度。
 ```
-
-这个命令将返回一个名为 avg_title_length 的聚合结果，其中包含 title 字段的平均长度。
