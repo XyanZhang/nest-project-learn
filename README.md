@@ -10,6 +10,41 @@
 
 > 总之，Controller 主要处理输入和输出，Service 处理业务逻辑，Module 则负责组织和管理它们。这些概念极其重要，有助于构建高度可维护、松耦合的应用程序。
 
+## 装饰器
+
+装饰器是一种特殊的语法，它可以用来修改类或者类的属性和方法。在 TypeScript 中，装饰器是通过注解的方式来实现的。装饰器可以用来实现很多功能，比如日志记录、权限控制、性能分析等等。
+
+装饰器的原理其实就是利用了 TypeScript 的元数据机制。在 TypeScript 中，每个类、属性、方法都有一个对应的元数据，可以通过 Reflect 库来获取。装饰器就是通过修改这些元数据来实现对类、属性、方法的修改。
+
+具体来说，装饰器是一个函数，它接受三个参数：target、propertyKey、descriptor。其中，target 表示被装饰的类或者类的原型，propertyKey 表示被装饰的属性或者方法的名称，descriptor 表示被装饰的属性或者方法的描述符。装饰器可以在这些参数上进行修改，从而实现对类、属性、方法的修改。
+
+例如，下面是一个简单的装饰器示例：
+
+```typescript
+function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  descriptor.value = function(...args: any[]) {
+    console.log(`Calling ${propertyKey} with arguments: ${JSON.stringify(args)}`);
+    const result = originalMethod.apply(this, args);
+    console.log(`Result: ${JSON.stringify(result)}`);
+    return result;
+  };
+  return descriptor;
+}
+
+class MyClass {
+  @log
+  myMethod(arg1: string, arg2: number) {
+    return { arg1, arg2 };
+  }
+}
+
+const myClass = new MyClass();
+myClass.myMethod('hello', 42);
+```
+
+这个装饰器可以在调用 MyClass 的 myMethod 方法时输出日志。具体来说，它会在方法调用前输出方法名和参数，然后调用原始方法，最后输出方法的返回值。这个装饰器的实现就是利用了 TypeScript 的元数据机制，通过修改方法的描述符来实现对方法的修改。
+
 ## 管道验证
 
 ```typescript
