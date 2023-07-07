@@ -40,7 +40,7 @@ export class CategoryService {
       onlyTrashed: trashed === SelectTrashMode.ONLY,
     });
     const data = await this.repository.toFlatTrees(tree);
-    return manualPaginate(options, data);
+    return data;
   }
 
   /**

@@ -266,3 +266,8 @@ GET /my_index/_search?q=Elasticsearch
 + create 文章的时候，同时创建索引，把该文章的 `id` 等字段存入索引中
 + update 文章的时候，同时更新索引
 + delete 文章的时候，同时删除索引（软删除是从es中删除，恢复时再次添加到es中
+
+
+## class-transformer
+
+@Expose 作用：在序列化时，只暴露指定的属性
