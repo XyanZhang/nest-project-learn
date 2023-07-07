@@ -1,5 +1,6 @@
+import { BaseEntity } from '@/modules/database/base/entity';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { BaseEntity, Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { PostEntity } from './post.entity';
 
 /* 

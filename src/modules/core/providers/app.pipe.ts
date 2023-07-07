@@ -1,6 +1,6 @@
 import { Injectable, ValidationPipe, ArgumentMetadata, Paramtype } from "@nestjs/common";
 import { isObject } from "class-validator";
-import { merge, arrayMerge, omit } from "lodash";
+import { merge, omit } from "lodash";
 import { DTO_VALIDATION_OPTIONS } from "../constants";
 
 // src/modules/core/providers/app.pipe.ts

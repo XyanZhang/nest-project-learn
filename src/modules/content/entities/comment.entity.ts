@@ -1,5 +1,6 @@
+import { BaseEntity } from "@/modules/database/base/entity";
 import { Exclude, Expose, Type } from "class-transformer";
-import { Tree, Entity, BaseEntity, ManyToOne, TreeParent, OneToMany, PrimaryGeneratedColumn, TreeChildren, Column, CreateDateColumn } from "typeorm";
+import { Tree, Entity, ManyToOne, TreeParent, OneToMany, PrimaryGeneratedColumn, TreeChildren, Column, CreateDateColumn } from "typeorm";
 import { PostEntity } from './post.entity';
 
 // src/modules/content/entities/comment.entity.ts

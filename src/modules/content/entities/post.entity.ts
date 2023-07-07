@@ -1,6 +1,7 @@
+import { BaseEntity } from "@/modules/database/base/entity";
 import { PostBodyType } from "@/modules/database/constants";
 import { Exclude, Expose, Type } from "class-transformer";
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { CommentEntity } from "./comment.entity";
 
